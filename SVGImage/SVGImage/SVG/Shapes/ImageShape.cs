@@ -51,8 +51,10 @@ namespace SVGImage.SVG.Shapes
                     b.EndInit();
                     this.ImageSource = b;
                 }
-                catch(Exception ex)
-                { }
+                catch
+                {
+                    // ignored
+                }
             }
         }
     }
