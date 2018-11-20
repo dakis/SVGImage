@@ -60,7 +60,20 @@ namespace SVGImage.SVG
             DependencyProperty.Register("FileSource", typeof(string), typeof(SVGImage), new PropertyMetadata(OnFileSourceChanged));
         static void OnFileSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((SVGImage)d).SetImage(new FileStream(e.NewValue.ToString(), FileMode.Open, FileAccess.Read));
+            var path = Convert.ToString(e.NewValue);
+            if (!File.Exists(path))
+            {
+                path = CombineWithCurrentDirectory(path);
+            }
+            ((SVGImage)d).SetImage(new FileStream(path, FileMode.Open, FileAccess.Read));
+        }
+
+        public static string CombineWithCurrentDirectory(params string[] paths)
+        {
+            var currentPath = AppDomain.CurrentDomain.BaseDirectory;
+            var combinedPath = Path.Combine(paths);
+
+            return Path.Combine(currentPath, combinedPath);
         }
 
         public static DependencyProperty ImageSourcePoperty = DependencyProperty.Register("ImageSource",
